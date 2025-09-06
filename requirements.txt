@@ -1,4 +1,4 @@
-pyautogen>=0.2.19
+pyautogen[retrievechat]>=0.2.19
 ipython
 huggingface_hub
 matplotlib
@@ -10,12 +10,9 @@ mplfinance
 backtrader
 sec_api
 
-# data handling
-numpy
-pandas
+
 pyPDF2
 reportlab
-pyautogen[retrievechat]
 
 # packaging
 setuptools>=41.4.0
