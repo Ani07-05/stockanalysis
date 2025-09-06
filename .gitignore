@@ -16,3 +16,5 @@ dist/
 tmp/
 filings/
 venv/
+tutorials_beginner/
+tutorials_advanced/
