@@ -27,7 +27,6 @@ tushare
 pandas_datareader
 
 pdfkit==1.0.0
-marker-pdf
 pandas==2.0.3
 aiohttp==3.8.5
 nltk==3.8.1
