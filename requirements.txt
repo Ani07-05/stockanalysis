@@ -1,39 +1,44 @@
-pyautogen[retrievechat]>=0.2.19
+# Core
 ipython
-huggingface_hub
 matplotlib
+pyautogen[retrievechat]>=0.2.19
 
-# financial libraries
+# Web & API Framework
+aiohttp==3.8.5
+starlette==0.37.2
+Requests==2.31.0
+praw
+
+# AI & LangChain
+pydantic==2.8.2
+pydantic-core==2.20.1
+langchain==0.1.20
+huggingface_hub
+
+# Data Handling & ML
+numpy==1.26.4
+pandas==2.0.3
+scikit-learn==1.5.0
+unstructured==0.8.1
+
+# Financial Libraries
 finnhub-python
 yfinance
 mplfinance
 backtrader
 sec_api
-
-
-pyPDF2
-reportlab
-
-# packaging
-setuptools>=41.4.0
-wheel>=0.33.6
-
-# historical data
-praw
 tushare
 pandas_datareader
 
+# PDF & Reporting
+pyPDF2
+reportlab
 pdfkit==1.0.0
-pandas==2.0.3
-aiohttp==3.8.5
-nltk==3.8.1
-numpy==1.26.4
+
+# Utilities
+setuptools>=41.4.0
+wheel>=0.33.6
 ratelimit==2.2.1
-Requests==2.31.0
-scikit-learn>=1.6.1
-langchain==0.1.20
-starlette==0.37.2
 tenacity==8.3.0
 tqdm==4.66.1
 typing_extensions==4.9.0
-unstructured==0.8.1
