@@ -8,6 +8,9 @@ from typing import Annotated, List, Tuple
 from matplotlib import pyplot as plt
 from pprint import pformat
 from IPython import get_ipython
+import pandas as pd
+from sklearn.linear_model import LinearRegression
+import numpy as np
 
 
 class DeployedCapitalAnalyzer(bt.Analyzer):
@@ -167,6 +170,55 @@ class BackTraderUtils:
         return "Back Test Finished. Results: \n" + pformat(stats_dict, indent=2)
 
 
+def linear_regression_forecast(data: pd.DataFrame, days: int = 90) -> str:
+    """
+    Performs a linear regression on the 'Close' price of the stock data
+    and forecasts the price for a given number of days into the future.
+    It also provides a brief explanation of the forecast.
+
+    Args:
+        data (pd.DataFrame): DataFrame with historical stock data, including a 'Close' column.
+        days (int): The number of days into the future to forecast. Defaults to 90.
+
+    Returns:
+        str: A paragraph explaining the forecast and the predicted price range.
+    """
+    # Ensure the index is a datetime object
+    if not isinstance(data.index, pd.DatetimeIndex):
+        data.index = pd.to_datetime(data.index)
+
+    # Use the number of days since the start of the data as the independent variable
+    data['days_from_start'] = (data.index - data.index[0]).days
+
+    # Prepare the data for sklearn
+    X = data[['days_from_start']]
+    y = data['Close']
+
+    # Create and fit the model
+    model = LinearRegression()
+    model.fit(X, y)
+
+    # Predict the price for the future day
+    future_day = X['days_from_start'].max() + days
+    predicted_price = float(model.predict(np.array([[future_day]]))[0])
+
+    # Determine the trend
+    trend = "upward" if float(model.coef_[0]) > 0 else "downward"
+    
+    # Create a simple price range
+    lower_bound = predicted_price * 0.95
+    upper_bound = predicted_price * 1.05
+
+    explanation = (
+        f"Based on a linear regression model analyzing the stock's historical data, the price trend has been {trend}. "
+        f"Projecting this trend forward, the forecasted price for the next {days} days is estimated to be in the range of "
+        f"{lower_bound:.2f} to {upper_bound:.2f}. This forecast is derived from the historical price movement and should be "
+        f"considered as one of many factors in an investment decision."
+    )
+
+    return explanation
+
+
 if __name__ == "__main__":
     # Example usage:
     start_date = "2011-01-01"
@@ -182,3 +234,4 @@ if __name__ == "__main__":
         "test_module:TestStrategy",
         {"exitbars": 5},
     )
+

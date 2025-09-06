@@ -128,6 +128,7 @@ class SingleAssistant(SingleAssistantBase):
         self,
         agent_config: str | Dict[str, Any],
         llm_config: Dict[str, Any] = {},
+        tool_builder: Optional[Callable] = None,
         is_termination_msg=lambda x: x.get("content", "")
         and x.get("content", "").endswith("TERMINATE"),
         human_input_mode="NEVER",
@@ -147,6 +148,11 @@ class SingleAssistant(SingleAssistantBase):
             code_execution_config=code_execution_config,
             **kwargs,
         )
+        if tool_builder:
+            tools = tool_builder()
+            function_map = {tool.__name__: tool for tool in tools}
+            self.assistant.register_function(function_map=function_map)
+            self.user_proxy.register_function(function_map=function_map)
         self.assistant.register_proxy(self.user_proxy)
 
     def chat(self, message: str, use_cache=False, **kwargs):
